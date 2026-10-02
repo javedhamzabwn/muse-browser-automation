@@ -1,0 +1,22 @@
+{
+  "background": {
+    "service_worker": "background.js"
+  },
+  "description": "Local browser control for Muse's own MCP server. Loopback WebSocket only; never leaves this PC.",
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "manifest_version": 3,
+  "name": "Muse Browser Control",
+  "permissions": [
+    "debugger",
+    "tabs",
+    "activeTab",
+    "scripting",
+    "storage",
+    "alarms",
+    "tabGroups",
+    "bookmarks"
+  ],
+  "version": "1.2.1"
+}
