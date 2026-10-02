@@ -1,0 +1,7 @@
+muse-browser-automation
+Copyright 2026 the project authors
+
+This product includes software developed for browser automation.
+
+Obscura browser is a separate upstream project
+(github.com/h4ckf0r0day/obscura, Apache 2.0) and is not vendored here.
