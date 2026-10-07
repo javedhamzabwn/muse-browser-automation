@@ -1864,25 +1864,6 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
         return {"tools": {k: {"status": v[0].value, "detail": v[1]} for k, v in checks.items()}, "system": doc}
 
     # Computer Control Handlers
-    async def get_computer_adapter(args: dict):
-        pref = args.get("backend", "auto")
-        if pref == "pyautogui-mcp":
-            from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
-            return McpComputerAdapter("pyautogui-mcp", "pyautogui-mcp", ["--transport", "stdio"])
-        elif pref == "zavora-computer-use" or pref == "zavora":
-            from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
-            import sys, os
-            z_path = os.path.join(os.getcwd(), "external", "zavora-computer-use", "dist", "server.js")
-            return McpComputerAdapter("zavora-computer-use", "node", [z_path])
-        elif pref == "mcp-computer-use":
-            from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
-            import sys, os
-            exe_path = os.path.join(os.getcwd(), "external", "mcp-computer-use", "bin", "mcp-computer-use.exe")
-            return McpComputerAdapter("mcp-computer-use", exe_path, [])
-        else:
-            from core.tools.adapters.computer.pyautogui_adapter import PyAutoGUIAdapter
-            return PyAutoGUIAdapter()
-
     if name == "computer_click":
         comp = await get_computer_adapter(args)
         res = await comp.mouse_click(int(args["x"]), int(args["y"]), button=args.get("button", "left"), clicks=int(args.get("clicks", 1)))
@@ -2076,6 +2057,34 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
         raise RuntimeError(res.get("error", f"Tool {name} failed"))
     return res.get("result")
 
+
+# Global adapter cache to prevent process leaks
+_global_adapter_cache = {}
+async def get_computer_adapter(args: dict):
+    global _global_adapter_cache
+    pref = args.get('backend', 'auto')
+    if pref == 'pyautogui-mcp':
+        from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
+        if 'pyautogui-mcp' not in _global_adapter_cache:
+            _global_adapter_cache['pyautogui-mcp'] = McpComputerAdapter('pyautogui-mcp', 'pyautogui-mcp', ['--transport', 'stdio'])
+        return _global_adapter_cache['pyautogui-mcp']
+    elif pref == 'zavora-computer-use' or pref == 'zavora':
+        from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
+        import sys, os
+        z_path = os.path.join(os.getcwd(), 'external', 'zavora-computer-use', 'dist', 'server.js')
+        if 'zavora' not in _global_adapter_cache:
+            _global_adapter_cache['zavora'] = McpComputerAdapter('zavora-computer-use', 'node', [z_path])
+        return _global_adapter_cache['zavora']
+    elif pref == 'mcp-computer-use':
+        from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
+        import sys, os
+        exe_path = os.path.join(os.getcwd(), 'external', 'mcp-computer-use', 'bin', 'mcp-computer-use.exe')
+        if 'mcp' not in _global_adapter_cache:
+            _global_adapter_cache['mcp'] = McpComputerAdapter('mcp-computer-use', exe_path, [])
+        return _global_adapter_cache['mcp']
+    else:
+        from core.tools.adapters.computer.pyautogui_adapter import PyAutoGUIAdapter
+        return PyAutoGUIAdapter()
 
 async def handle_mcp_post(request: web.Request) -> web.Response:
     """Handle MCP JSON-RPC 2.0 requests over HTTP."""
