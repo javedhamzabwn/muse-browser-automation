@@ -33,10 +33,10 @@ class PlaywrightBackend(BaseBrowserBackend):
             return False
 
     async def is_connected(self) -> bool:
-        return self._browser is not None and self._browser.is_connected()
+        return self._browser is not None
 
     async def start(self) -> None:
-        if self._browser and self._browser.is_connected():
+        if self._browser:
             return
         from playwright.async_api import async_playwright
         self._pw = await async_playwright().start()
@@ -64,7 +64,7 @@ class PlaywrightBackend(BaseBrowserBackend):
         self._pages.clear()
 
     async def ensure_active_page(self) -> Any:
-        if not self._browser or not self._browser.is_connected() or not self._context:
+        if not self._browser or not self._context:
             await self.start()
         if not self._pages:
             await self.create_tab()
@@ -125,7 +125,7 @@ class PlaywrightBackend(BaseBrowserBackend):
                 self._active_tab_id = next(iter(self._pages.keys())) if self._pages else None
 
     async def navigate(self, tab_id: str, url: str, wait_until: str = "load") -> bool:
-        if not self._pages or not self._browser or not self._browser.is_connected():
+        if not self._pages or not self._browser:
             await self.ensure_active_page()
         page = self._get_page(tab_id)
         # Event-driven wait with aggressive timeout and retry
