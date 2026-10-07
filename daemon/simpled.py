@@ -1879,17 +1879,17 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
         pref = args.get("backend", "auto")
         if pref == "pyautogui-mcp":
             from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
-            return McpComputerAdapter("pyautogui-mcp", ["--transport", "stdio"])
+            return McpComputerAdapter("pyautogui-mcp", "pyautogui-mcp", ["--transport", "stdio"])
         elif pref == "zavora-computer-use" or pref == "zavora":
             from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
             import sys, os
             z_path = os.path.join(os.getcwd(), "external", "zavora-computer-use", "dist", "server.js")
-            return McpComputerAdapter("node", [z_path])
+            return McpComputerAdapter("zavora-computer-use", "node", [z_path])
         elif pref == "mcp-computer-use":
             from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
             import sys, os
             exe_path = os.path.join(os.getcwd(), "external", "mcp-computer-use", "bin", "mcp-computer-use.exe")
-            return McpComputerAdapter(exe_path, [])
+            return McpComputerAdapter("mcp-computer-use", exe_path, [])
         else:
             from core.tools.adapters.computer.pyautogui_adapter import PyAutoGUIAdapter
             return PyAutoGUIAdapter()
