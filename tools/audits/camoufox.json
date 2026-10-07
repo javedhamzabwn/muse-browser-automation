@@ -1,0 +1,49 @@
+{
+  "tool_id": "camoufox",
+  "name": "Camoufox Anti-Detect Browser",
+  "repository": "https://github.com/daijro/camoufox",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\camoufox",
+  "commit": "f36390a19ebe21a5b082cf2f7817ef1f988464e0",
+  "language": "TypeScript / Node.js",
+  "frameworks": [],
+  "license": "Apache-2.0",
+  "architecture": "Firefox-based anti-detect browser with native C++ fingerprint spoofing",
+  "process_model": "Python Playwright-compatible browser process",
+  "communication_model": "Playwright Python API",
+  "mcp_support": false,
+  "mcp_transport": null,
+  "native_modules": [],
+  "dependencies": [],
+  "security_concerns": [
+    "Browser credential persistence"
+  ],
+  "entrypoints": [],
+  "source_files_count": 582,
+  "total_loc": 52769,
+  "capabilities": [
+    "C++ level canvas/audio/webgl fingerprint spoofing",
+    "Firefox gecko engine",
+    "Full Playwright compatibility"
+  ],
+  "limitations": [
+    "Large browser download (>100MB)"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "Direct Python import via camoufox package"
+  ],
+  "recommended_integration": "Tier 3 stealth browser backend alongside Obscura",
+  "decision": "compatible",
+  "key_source_files": [
+    "multibuild.py",
+    "build-tester\\scripts\\bundle.py",
+    "build-tester\\scripts\\certificate.py",
+    "build-tester\\scripts\\constants.py",
+    "build-tester\\scripts\\generate-presets.py"
+  ],
+  "raw_details": {}
+}

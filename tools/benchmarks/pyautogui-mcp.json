@@ -1,0 +1,36 @@
+{
+  "tool_id": "pyautogui-mcp",
+  "category": "computer_control",
+  "iterations": 3,
+  "timestamp": "2026-10-03 11:15:05Z",
+  "metrics": {
+    "screenshot_ms": {
+      "count": 3,
+      "min_ms": 8.17,
+      "p50_ms": 9.29,
+      "p95_ms": 11.16,
+      "p99_ms": 11.16,
+      "mean_ms": 9.54,
+      "failure_rate": 0.0
+    },
+    "cursor_pos_ms": {
+      "count": 3,
+      "min_ms": 0.07,
+      "p50_ms": 0.08,
+      "p95_ms": 0.11,
+      "p99_ms": 0.11,
+      "mean_ms": 0.09,
+      "failure_rate": 0.0
+    },
+    "window_list_ms": {
+      "count": 3,
+      "min_ms": 0.02,
+      "p50_ms": 0.02,
+      "p95_ms": 0.03,
+      "p99_ms": 0.03,
+      "mean_ms": 0.02,
+      "failure_rate": 0.0
+    }
+  },
+  "summary": "pyautogui-mcp: screenshot p50=9.29ms"
+}

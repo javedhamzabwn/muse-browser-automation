@@ -1,0 +1,22 @@
+[
+  {
+    "category": "MCP integration tests",
+    "name": "mcp_initialize",
+    "error": "timed out"
+  },
+  {
+    "category": "MCP integration tests",
+    "name": "mcp_tools_list",
+    "error": "timed out"
+  },
+  {
+    "category": "MCP integration tests",
+    "name": "mcp_tool_call_tool_status",
+    "error": "timed out"
+  },
+  {
+    "category": "MCP integration tests",
+    "name": "mcp_error_handling",
+    "error": "timed out"
+  }
+]

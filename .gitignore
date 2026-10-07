@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 *.log
 cookies-export*.txt
+*.zip
+obscura/obscura-*/
+.muse/
+external/
+state/

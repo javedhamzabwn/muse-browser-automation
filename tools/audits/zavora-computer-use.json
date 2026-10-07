@@ -1,0 +1,66 @@
+{
+  "tool_id": "zavora-computer-use",
+  "name": "Zavora Computer Use MCP",
+  "repository": "https://github.com/zavora-ai/computer-use-mcp",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\zavora-computer-use",
+  "commit": "35de1a26fa846d77bde6af89a43535c1e44980e7",
+  "language": "TypeScript / Node.js",
+  "frameworks": [],
+  "license": "MIT",
+  "architecture": "Native Rust/NAPI Windows UI Automation Engine + MCP TypeScript Server",
+  "process_model": "Node.js host process with compiled Rust DLL via NAPI",
+  "communication_model": "stdio (JSON-RPC MCP)",
+  "mcp_support": true,
+  "mcp_transport": "stdio",
+  "native_modules": [
+    "N-API / C++ / Rust bindings"
+  ],
+  "dependencies": [
+    "@modelcontextprotocol/client",
+    "@modelcontextprotocol/core",
+    "@modelcontextprotocol/node",
+    "@modelcontextprotocol/server",
+    "zod"
+  ],
+  "security_concerns": [
+    "Full desktop input injection (mouse/keyboard)",
+    "Can read entire display framebuffer",
+    "Arbitrary process inspection & termination"
+  ],
+  "entrypoints": [
+    "index.js"
+  ],
+  "source_files_count": 689,
+  "total_loc": 35714,
+  "capabilities": [
+    "High-performance native Windows coordinate clicking (Rust)",
+    "Hardware keyboard scan-code typing",
+    "Direct Desktop Duplication API screen capture",
+    "UI Automation element tree walking",
+    "Window discovery & process handles"
+  ],
+  "limitations": [
+    "Windows-specific native compilation required (MSVC toolchain)",
+    "Full screen takeover potential during mouse automation"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "Expose via internal stdio MCP client routed into Muse 18010 gateway",
+    "Spawn dedicated loopback worker on private localhost port",
+    "Call compiled CLI subcommands directly"
+  ],
+  "recommended_integration": "Multiplex stdio MCP protocol behind Muse /mcp on 127.0.0.1:18010",
+  "decision": "compatible",
+  "key_source_files": [
+    "mcp-server.toml",
+    ".kiro\\specs\\windows-native-support\\.config.kiro",
+    ".kiro\\specs\\windows-native-support\\design.md",
+    ".kiro\\specs\\windows-native-support\\requirements.md",
+    ".kiro\\specs\\windows-native-support\\tasks.md"
+  ],
+  "raw_details": {}
+}

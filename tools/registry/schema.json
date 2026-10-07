@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MuseToolRegistry",
+  "type": "object",
+  "required": ["version", "tools"],
+  "properties": {
+    "version": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "category", "repository", "install", "capabilities"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["browser", "fetching", "computer_control", "media", "reddit", "utility"]
+          },
+          "repository": { "type": "string", "format": "uri" },
+          "homepage": { "type": "string" },
+          "license": { "type": "string" },
+          "description": { "type": "string" },
+          "install": {
+            "type": "object",
+            "properties": {
+              "windows": {
+                "type": "object",
+                "properties": {
+                  "method": { "type": "string", "enum": ["builtin", "npm", "pip", "git", "download", "manual", "cargo", "go"] },
+                  "command": { "type": "string" },
+                  "binary": { "type": "string" },
+                  "env_check": { "type": "string" },
+                  "dependencies": { "type": "array", "items": { "type": "string" } }
+                }
+              },
+              "linux": { "type": "object" },
+              "darwin": { "type": "object" }
+            }
+          },
+          "capabilities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "health_check": {
+            "type": "object",
+            "properties": {
+              "command": { "type": "string" },
+              "timeout_sec": { "type": "number" },
+              "expected_exit_code": { "type": "integer" }
+            }
+          },
+          "mcp": {
+            "type": "object",
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "transport": { "type": "string", "enum": ["stdio", "sse", "websocket", "internal"] },
+              "command": { "type": "string" },
+              "args": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "default_priority": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

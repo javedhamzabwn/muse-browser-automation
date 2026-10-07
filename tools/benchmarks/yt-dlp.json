@@ -1,0 +1,27 @@
+{
+  "tool_id": "yt-dlp",
+  "category": "media",
+  "iterations": 3,
+  "timestamp": "2026-10-03 11:16:26Z",
+  "metrics": {
+    "version_ms": {
+      "count": 3,
+      "min_ms": 0.0,
+      "p50_ms": 0.0,
+      "p95_ms": 338.17,
+      "p99_ms": 338.17,
+      "mean_ms": 112.72,
+      "failure_rate": 0.0
+    },
+    "extractor_init_ms": {
+      "count": 3,
+      "min_ms": 5.35,
+      "p50_ms": 8.27,
+      "p95_ms": 849.05,
+      "p99_ms": 849.05,
+      "mean_ms": 287.55,
+      "failure_rate": 0.0
+    }
+  },
+  "summary": "yt-dlp: extractor_init p50=8.27ms"
+}

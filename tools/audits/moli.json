@@ -1,0 +1,53 @@
+{
+  "tool_id": "moli",
+  "name": "Moli Browser Engine",
+  "repository": "https://github.com/lexmount/moli",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\moli",
+  "commit": "8f7598a30f406ff789c0e8a4f257e68d97ac23b7",
+  "language": "TypeScript / Node.js",
+  "frameworks": [
+    "Cargo / Rust"
+  ],
+  "license": "Apache-2.0",
+  "architecture": "High-speed scriptable headless browser automation engine",
+  "process_model": "Subprocess browser controller",
+  "communication_model": "CDP / stdio",
+  "mcp_support": false,
+  "mcp_transport": null,
+  "native_modules": [
+    "Native Rust compiled binary"
+  ],
+  "dependencies": [],
+  "security_concerns": [
+    "Browser network traffic"
+  ],
+  "entrypoints": [],
+  "source_files_count": 7325,
+  "total_loc": 71816,
+  "capabilities": [
+    "Fast page fetch",
+    "DOM evaluation",
+    "Screenshot"
+  ],
+  "limitations": [
+    "Early stage development, platform-dependent builds"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "CLI wrapper adapter"
+  ],
+  "recommended_integration": "Tier 1 fallback browser adapter",
+  "decision": "partially_compatible",
+  "key_source_files": [
+    ".gitignore",
+    "AGENTS.md",
+    "Cargo.lock",
+    "Cargo.toml",
+    "clippy.toml"
+  ],
+  "raw_details": {}
+}

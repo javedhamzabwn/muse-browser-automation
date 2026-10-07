@@ -1,0 +1,49 @@
+{
+  "tool_id": "lightpanda",
+  "name": "Lightpanda Headless Browser",
+  "repository": "https://github.com/lightpanda-io/browser",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\lightpanda",
+  "commit": "eceaa2e262e182475b7179153234798c4cca9203",
+  "language": "JavaScript",
+  "frameworks": [],
+  "license": "GPL / AGPL",
+  "architecture": "Lightweight headless browser written in Zig/C, optimized for AI agents",
+  "process_model": "Native compiled binary",
+  "communication_model": "CDP (Chrome DevTools Protocol)",
+  "mcp_support": false,
+  "mcp_transport": null,
+  "native_modules": [],
+  "dependencies": [],
+  "security_concerns": [
+    "Outbound web fetch"
+  ],
+  "entrypoints": [],
+  "source_files_count": 1200,
+  "total_loc": 77194,
+  "capabilities": [
+    "Ultra-low memory footprint",
+    "Fast JS execution",
+    "DOM extraction"
+  ],
+  "limitations": [
+    "Windows native binary availability varies; pre-alpha builds"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "CDP WebSocket bridge or CLI adapter"
+  ],
+  "recommended_integration": "Tier 1 high-speed JS fetcher",
+  "decision": "partially_compatible",
+  "key_source_files": [
+    ".gitignore",
+    ".plumber.yaml",
+    "AGENTS.md",
+    "build.zig",
+    "build.zig.zon"
+  ],
+  "raw_details": {}
+}

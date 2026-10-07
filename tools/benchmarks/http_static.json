@@ -1,0 +1,36 @@
+{
+  "tool_id": "http_static",
+  "category": "browser",
+  "iterations": 3,
+  "timestamp": "2026-10-06 17:11:20Z",
+  "metrics": {
+    "startup_ms": {
+      "count": 3,
+      "min_ms": 1034.86,
+      "p50_ms": 1363.29,
+      "p95_ms": 1807.28,
+      "p99_ms": 1807.28,
+      "mean_ms": 1401.81,
+      "failure_rate": 0.0
+    },
+    "navigation_static_ms": {
+      "count": 3,
+      "min_ms": 1034.88,
+      "p50_ms": 1363.31,
+      "p95_ms": 1807.3,
+      "p99_ms": 1807.3,
+      "mean_ms": 1401.83,
+      "failure_rate": 0.0
+    },
+    "content_extraction_ms": {
+      "count": 3,
+      "min_ms": 0.0,
+      "p50_ms": 0.0,
+      "p95_ms": 0.0,
+      "p99_ms": 0.0,
+      "mean_ms": 0.0,
+      "failure_rate": 1.0
+    }
+  },
+  "summary": "http_static: p50=1363.31ms"
+}

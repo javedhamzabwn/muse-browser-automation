@@ -1,0 +1,48 @@
+{
+  "tool_id": "mcp-computer-use",
+  "name": "Mcp.ComputerUse",
+  "repository": "https://github.com/tdav/Mcp.ComputerUse",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\mcp-computer-use",
+  "commit": "41f6b5a13e486176777cab3377d36bbf51e80556",
+  "language": "C# / .NET",
+  "frameworks": [],
+  "license": "Unknown",
+  "architecture": ".NET / C# MCP server using Windows UIAutomationCore and user32.dll",
+  "process_model": ".NET runtime CLR process",
+  "communication_model": "stdio",
+  "mcp_support": true,
+  "mcp_transport": "stdio",
+  "native_modules": [],
+  "dependencies": [],
+  "security_concerns": [
+    "Desktop accessibility control"
+  ],
+  "entrypoints": [],
+  "source_files_count": 202,
+  "total_loc": 1586,
+  "capabilities": [
+    "Native Windows UI Automation accessibility element discovery",
+    "Process and application targeting"
+  ],
+  "limitations": [
+    "Requires .NET SDK / Runtime installed on system"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "Run via dotnet cli and pipe stdio"
+  ],
+  "recommended_integration": "Optional secondary desktop automation backend",
+  "decision": "partially_compatible",
+  "key_source_files": [
+    "Mcp.ComputerUse\\AppOptions.cs",
+    "Mcp.ComputerUse\\HostStartup.cs",
+    "Mcp.ComputerUse\\Mcp.ComputerUse.csproj",
+    "Mcp.ComputerUse\\Program.cs",
+    "Mcp.ComputerUse\\Core\\CoordinateMapper.cs"
+  ],
+  "raw_details": {}
+}

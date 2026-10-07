@@ -1,0 +1,52 @@
+{
+  "tool_id": "pyautogui-mcp",
+  "name": "PyAutoGUI MCP",
+  "repository": "https://github.com/chigwell/pyautogui-mcp",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\pyautogui-mcp",
+  "commit": "3f22e0153d9cce878ffb74cd515b239048a63b1b",
+  "language": "Python",
+  "frameworks": [
+    "Python Package"
+  ],
+  "license": "Custom Open Source",
+  "architecture": "Python PyAutoGUI wrapper exposing MCP JSON-RPC protocol",
+  "process_model": "Python subprocess executing pywin32 / ctypes",
+  "communication_model": "stdio (MCP protocol)",
+  "mcp_support": true,
+  "mcp_transport": "stdio",
+  "native_modules": [],
+  "dependencies": [],
+  "security_concerns": [
+    "Global mouse and keyboard input control"
+  ],
+  "entrypoints": [],
+  "source_files_count": 16,
+  "total_loc": 493,
+  "capabilities": [
+    "Pure Python coordinate mouse clicking",
+    "Keyboard typing and hotkey dispatch",
+    "Pillow screenshot capture"
+  ],
+  "limitations": [
+    "No direct UI Automation accessibility tree inspection",
+    "Screenshot capture slower than Direct3D / Rust"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "Direct in-process Python module import",
+    "Subprocess stdio MCP bridge"
+  ],
+  "recommended_integration": "In-process Python adapter or stdio MCP bridge",
+  "decision": "compatible",
+  "key_source_files": [
+    "main.py",
+    "pyautogui_mcp\\app.py",
+    "pyautogui_mcp\\__init__.py",
+    "pyautogui_mcp\\__main__.py"
+  ],
+  "raw_details": {}
+}

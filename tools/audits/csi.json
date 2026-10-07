@@ -1,0 +1,44 @@
+{
+  "tool_id": "csi",
+  "name": "CSI Chrome System Interface",
+  "repository": "https://github.com/ximing/csi",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\csi",
+  "commit": "18c105a78d8d855dd17e52808617b4859403a9f5",
+  "language": "TypeScript / Node.js",
+  "frameworks": [],
+  "license": "Custom Open Source",
+  "architecture": "Chrome System Interface: connects to active user Chrome via CDP",
+  "process_model": "Python script connecting to running Chrome debugging port",
+  "communication_model": "WebSocket CDP",
+  "mcp_support": false,
+  "mcp_transport": null,
+  "native_modules": [],
+  "dependencies": [],
+  "security_concerns": [
+    "Access to user's real browser profile and credentials"
+  ],
+  "entrypoints": [
+    ".opencode/plugins/csi.js"
+  ],
+  "source_files_count": 340,
+  "total_loc": 27398,
+  "capabilities": [
+    "Zero login required (uses existing session)",
+    "Full extension and profile preservation"
+  ],
+  "limitations": [
+    "Requires Chrome launched with remote debugging port"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "Incorporate into ChromeAdapter"
+  ],
+  "recommended_integration": "Backend for user-authenticated browser sessions",
+  "decision": "compatible",
+  "key_source_files": [],
+  "raw_details": {}
+}

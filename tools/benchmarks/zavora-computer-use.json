@@ -1,0 +1,36 @@
+{
+  "tool_id": "zavora-computer-use",
+  "category": "computer_control",
+  "iterations": 3,
+  "timestamp": "2026-10-03 11:15:05Z",
+  "metrics": {
+    "screenshot_ms": {
+      "count": 3,
+      "min_ms": 9.62,
+      "p50_ms": 11.67,
+      "p95_ms": 25.6,
+      "p99_ms": 25.6,
+      "mean_ms": 15.63,
+      "failure_rate": 0.0
+    },
+    "cursor_pos_ms": {
+      "count": 3,
+      "min_ms": 0.08,
+      "p50_ms": 0.29,
+      "p95_ms": 6.67,
+      "p99_ms": 6.67,
+      "mean_ms": 2.35,
+      "failure_rate": 0.0
+    },
+    "window_list_ms": {
+      "count": 3,
+      "min_ms": 0.02,
+      "p50_ms": 0.06,
+      "p95_ms": 0.08,
+      "p99_ms": 0.08,
+      "mean_ms": 0.05,
+      "failure_rate": 0.0
+    }
+  },
+  "summary": "zavora-computer-use: screenshot p50=11.67ms"
+}

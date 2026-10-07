@@ -1,0 +1,46 @@
+{
+  "category": "Computer-use tests",
+  "backend": "pyautogui",
+  "results": [
+    {
+      "backend": "pyautogui",
+      "action": "desktop_inspection",
+      "success": true,
+      "duration_ms": 21.24,
+      "details": {
+        "cursor": [
+          0,
+          0
+        ],
+        "screenshot_size": 0,
+        "windows_count": 0
+      },
+      "error": null
+    },
+    {
+      "backend": "pyautogui",
+      "action": "notepad_application_flow",
+      "success": true,
+      "duration_ms": 2107.98,
+      "details": {
+        "process_launched": true,
+        "content_verified": true
+      },
+      "error": null
+    },
+    {
+      "backend": "pyautogui",
+      "action": "calculator_launch_terminate",
+      "success": true,
+      "duration_ms": 1103.52,
+      "details": {
+        "launched": true
+      },
+      "error": null
+    }
+  ],
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "duration_ms": 3233.22
+}

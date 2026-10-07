@@ -1,0 +1,232 @@
+/* Muse Browser Automation 4.0 - Textual Stylesheet */
+
+Screen {
+    layout: vertical;
+    background: $background;
+    color: $text;
+}
+
+#header-bar {
+    dock: top;
+    height: 3;
+    background: $primary-darken-3;
+    color: $text;
+    padding: 0 1;
+    layout: horizontal;
+    align-vertical: middle;
+    border-bottom: heavy $primary;
+}
+
+#app-title {
+    width: auto;
+    text-style: bold;
+    color: $accent;
+    content-align: left middle;
+}
+
+#gateway-badge-container {
+    width: 1fr;
+    content-align: right middle;
+}
+
+#main-layout {
+    layout: horizontal;
+    height: 1fr;
+}
+
+/* Sidebar Navigation */
+#nav-sidebar, NavSidebar {
+    width: 22;
+    min-width: 18;
+    max-width: 26;
+    height: 100%;
+    background: $surface;
+    border-right: heavy $primary-darken-2;
+    padding: 1 0;
+    overflow-y: auto;
+}
+
+.nav-button {
+    width: 100%;
+    margin: 0 0 1 0;
+    padding: 0 1;
+    content-align: left middle;
+    text-align: left;
+    border: none;
+    background: transparent;
+    color: $text-muted;
+}
+
+.nav-button:hover {
+    background: $primary-darken-2;
+    color: $text;
+}
+
+.nav-button.-active {
+    background: $primary;
+    color: $text;
+    text-style: bold;
+}
+
+/* Content Area */
+#content-switcher {
+    width: 1fr;
+    height: 100%;
+    padding: 1 2;
+    overflow-y: auto;
+}
+
+/* Dashboard Grid */
+.grid-2 {
+    layout: grid;
+    grid-size: 2;
+    grid-gutter: 1 2;
+    height: auto;
+}
+
+.grid-3 {
+    layout: grid;
+    grid-size: 3;
+    grid-gutter: 1 2;
+    height: auto;
+}
+
+.stat-card {
+    border: round $primary-darken-1;
+    background: $surface;
+    padding: 1;
+    min-height: 7;
+}
+
+.stat-card-title {
+    text-style: bold;
+    color: $accent;
+    border-bottom: solid $primary-darken-2;
+    margin-bottom: 1;
+}
+
+.badge-online {
+    color: $success;
+    text-style: bold;
+}
+
+.badge-offline {
+    color: $error;
+    text-style: bold;
+}
+
+.badge-degraded {
+    color: $warning;
+    text-style: bold;
+}
+
+.badge-protected {
+    color: #4da6ff;
+    text-style: bold;
+}
+
+/* Data Tables */
+DataTable {
+    height: 1fr;
+    border: round $primary;
+    background: $surface;
+}
+
+/* Filter Controls Bar */
+.toolbar {
+    layout: horizontal;
+    height: auto;
+    margin-bottom: 1;
+    align-vertical: middle;
+}
+
+.toolbar > * {
+    margin-right: 1;
+}
+
+#card-tool-output {
+    height: 9;
+    min-height: 7;
+    margin-top: 1;
+    padding: 0 1;
+}
+
+#log-tool-output {
+    height: 1fr;
+    background: #0d1117;
+}
+
+/* Terminal Screen */
+#terminal-output {
+    height: 1fr;
+    border: round $primary;
+    background: #0d1117;
+    color: #c9d1d9;
+    padding: 0 1;
+}
+
+#terminal-input-bar {
+    layout: horizontal;
+    height: 3;
+    margin-top: 1;
+}
+
+#terminal-prompt {
+    width: auto;
+    padding: 0 1;
+    content-align: center middle;
+    color: $accent;
+    text-style: bold;
+}
+
+#terminal-input {
+    width: 1fr;
+}
+
+/* Modals */
+ModalScreen {
+    align: center middle;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.dialog-box {
+    width: 68;
+    max-width: 90%;
+    height: auto;
+    max-height: 85%;
+    border: thick $primary;
+    background: $surface;
+    padding: 1 2;
+    layout: vertical;
+}
+
+.dialog-title {
+    text-style: bold;
+    color: $accent;
+    margin-bottom: 1;
+    border-bottom: solid $primary;
+}
+
+.dialog-content {
+    margin-bottom: 1;
+    height: auto;
+    max-height: 18;
+    overflow-y: auto;
+}
+
+.dialog-buttons {
+    layout: horizontal;
+    align-horizontal: right;
+    height: 3;
+    margin-top: 1;
+}
+
+.dialog-buttons Button {
+    margin-left: 2;
+}
+
+/* Footer & Help */
+Footer {
+    background: $primary-darken-3;
+    color: $text;
+}

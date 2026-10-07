@@ -1,0 +1,50 @@
+{
+  "tool_id": "agent-browser",
+  "name": "Agent Browser CLI",
+  "repository": "https://github.com/vercel-labs/agent-browser",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\agent-browser",
+  "commit": "39a74c70d7759d5a6de7a22c04570bb626bbd081",
+  "language": "TypeScript / Node.js",
+  "frameworks": [],
+  "license": "Apache-2.0",
+  "architecture": "Vercel Labs headless browser CLI tailored for agent workflows",
+  "process_model": "Node.js process executing Puppeteer / Playwright",
+  "communication_model": "CLI stdout / MCP",
+  "mcp_support": true,
+  "mcp_transport": null,
+  "native_modules": [
+    "N-API / C++ / Rust bindings"
+  ],
+  "dependencies": [],
+  "security_concerns": [],
+  "entrypoints": [
+    "index.js"
+  ],
+  "source_files_count": 472,
+  "total_loc": 74081,
+  "capabilities": [
+    "Semantic snapshotting",
+    "Deterministic action dispatch"
+  ],
+  "limitations": [
+    "Node runtime dependency"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "CLI subcommand adapter or stdio MCP"
+  ],
+  "recommended_integration": "Tier 2 headless agent browser",
+  "decision": "compatible",
+  "key_source_files": [
+    ".gitignore",
+    ".node-version",
+    ".prettierrc",
+    "agent-browser.schema.json",
+    "AGENTS.md"
+  ],
+  "raw_details": {}
+}

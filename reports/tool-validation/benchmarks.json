@@ -1,0 +1,9 @@
+{
+  "synthetic_ms": 4.46,
+  "local_ms": 20260.13,
+  "browser_real_world_ms": 35815.62,
+  "session_vault_ms": 80.6,
+  "computer_use_ms": 3233.22,
+  "mcp_gateway_ms": 40030.43,
+  "total_ms": 99426.85
+}

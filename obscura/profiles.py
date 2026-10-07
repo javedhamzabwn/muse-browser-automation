@@ -28,12 +28,15 @@ import urllib.request
 import websockets
 
 # ── Configuration ────────────────────────────────────────────────────
-OBSCURA_EXE = r"C:\Users\AL Hussain Academy\obscura\obscura.exe"
-PROFILES_DIR = r"C:\Users\AL Hussain Academy\obscura"
+OBSCURA_DIR = os.environ.get("OBSCURA_DIR") or os.path.join(os.path.expanduser("~"), "obscura")
+OBSCURA_EXE = os.environ.get("OBSCURA_EXE") or os.path.join(
+    OBSCURA_DIR, "obscura.exe" if sys.platform == "win32" else "obscura"
+)
+PROFILES_DIR = os.environ.get("OBSCURA_PROFILES_DIR") or OBSCURA_DIR
 MAIN_PROFILE = os.path.join(PROFILES_DIR, "profile")
 TEMP_DIR = os.path.join(PROFILES_DIR, "temp_profiles")
-DAEMON_URL = "http://127.0.0.1:18010/tool"
-CREATE_NO_WINDOW = 0x08000000
+DAEMON_URL = os.environ.get("MUSE_DAEMON_URL") or "http://127.0.0.1:18010/tool"
+CREATE_NO_WINDOW = 0x08000000 if sys.platform == "win32" else 0
 # ─────────────────────────────────────────────────────────────────────
 
 msg_id = 0
@@ -69,13 +72,25 @@ def is_port_open(port):
     except Exception:
         return False
 
-def find_free_port(start=9222, end=9250):
+def find_free_port(start=9224, end=9250):
     for port in range(start, end):
         if not is_port_open(port):
             return port
-    raise RuntimeError("No free ports available in range 9222-9250")
+    raise RuntimeError("No free ports available in range 9224-9250")
 
 def start_obscura(profile_dir, port):
+    global OBSCURA_EXE
+    if not os.path.isfile(OBSCURA_EXE):
+        print(f"[profiles] Obscura executable not found at '{OBSCURA_EXE}'. Attempting auto-download...")
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            from core.obscura_downloader import ensure_obscura_installed
+            OBSCURA_EXE = ensure_obscura_installed(OBSCURA_DIR)
+        except Exception as e:
+            raise FileNotFoundError(
+                f"Obscura executable missing at '{OBSCURA_EXE}' and auto-download failed: {e}. "
+                "Please check internet connection or manually place obscura.exe in OBSCURA_DIR."
+            )
     os.makedirs(profile_dir, exist_ok=True)
     proc = subprocess.Popen(
         [
@@ -116,7 +131,7 @@ def list_profiles():
             with open(info_path) as f:
                 profiles.append(json.load(f))
         else:
-            profiles.append({"profile_dir": MAIN_PROFILE, "type": "main", "port": 9222})
+            profiles.append({"profile_dir": MAIN_PROFILE, "type": "main", "port": 9224})
 
     if os.path.exists(TEMP_DIR):
         for name in os.listdir(TEMP_DIR):
@@ -268,10 +283,10 @@ async def sync_cookies_to_main():
         return False
 
     # Stop main Obscura safely so we can merge cookies.json
-    if is_port_open(9222):
-        closed = await graceful_stop_obscura(9222)
+    if is_port_open(9224):
+        closed = await graceful_stop_obscura(9224)
         if not closed:
-            print("[profiles] ERROR: port 9222 still open; aborting merge.")
+            print("[profiles] ERROR: port 9224 still open; aborting merge.")
             return False
 
     # Merge into cookies.json
@@ -279,9 +294,9 @@ async def sync_cookies_to_main():
     print(f"[profiles] cookies.json: {added + updated} total affected ({added} added, {updated} updated).")
 
     # Restart main Obscura
-    print("[profiles] Restarting main Obscura on port 9222...")
-    proc, _port = start_obscura(MAIN_PROFILE, 9222)
-    save_profile_info(MAIN_PROFILE, 9222, "main", proc.pid)
+    print("[profiles] Restarting main Obscura on port 9224...")
+    proc, _port = start_obscura(MAIN_PROFILE, 9224)
+    save_profile_info(MAIN_PROFILE, 9224, "main", proc.pid)
     print(f"[profiles] Main profile running again (PID {proc.pid}).")
     return True
 
@@ -289,14 +304,14 @@ async def sync_cookies_to_main():
 
 async def cmd_main_profile():
     print("[profiles] === MAIN PROFILE ===")
-    if is_port_open(9222):
-        print("[profiles] Main profile already running on port 9222.")
+    if is_port_open(9224):
+        print("[profiles] Main profile already running on port 9224.")
     else:
         print("[profiles] Starting main profile...")
-        proc, port = start_obscura(MAIN_PROFILE, 9222)
+        proc, port = start_obscura(MAIN_PROFILE, 9224)
         save_profile_info(MAIN_PROFILE, port, "main", proc.pid)
         print(f"[profiles] Main profile started on port {port} (PID {proc.pid}).")
-    print("[profiles] CDP endpoint: ws://127.0.0.1:9222/devtools/browser")
+    print("[profiles] CDP endpoint: ws://127.0.0.1:9224/devtools/browser")
 
 async def cmd_temp_profile():
     print("[profiles] === TEMP PROFILE (with fresh cookies) ===")
@@ -323,7 +338,7 @@ async def cmd_temp_profile():
         print(f"[profiles] Injected {added + updated} fresh cookies into temp profile.")
 
     # 3. Start Obscura on a new port
-    port = find_free_port(9223)
+    port = find_free_port(9225)
     print(f"[profiles] Starting temp profile on port {port}...")
     proc, port = start_obscura(profile_dir, port)
     save_profile_info(profile_dir, port, "temp", proc.pid)
@@ -340,7 +355,7 @@ async def cmd_empty_profile():
     profile_dir = os.path.join(TEMP_DIR, profile_id)
     os.makedirs(profile_dir, exist_ok=True)
 
-    port = find_free_port(9223)
+    port = find_free_port(9225)
     print(f"[profiles] Starting empty profile on port {port}...")
     proc, port = start_obscura(profile_dir, port)
     save_profile_info(profile_dir, port, "empty", proc.pid)
@@ -353,9 +368,16 @@ async def cmd_empty_profile():
 
 def main():
     parser = argparse.ArgumentParser(description="Obscura Profile Manager")
-    parser.add_argument("action", choices=["main", "temp", "empty", "sync", "list", "cleanup"],
-                        help="main=persistent profile, temp=clone with cookies, empty=blank, sync=update cookies, list=show profiles, cleanup=delete temp profiles")
+    parser.add_argument("action", choices=["main", "temp", "empty", "sync", "list", "cleanup", "install", "download"],
+                        help="main=persistent profile, temp=clone with cookies, empty=blank, sync=update cookies, list=show profiles, cleanup=delete temp profiles, install/download=fetch Obscura binary")
     args = parser.parse_args()
+
+    if args.action in ("install", "download"):
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from core.obscura_downloader import ensure_obscura_installed
+        p = ensure_obscura_installed(OBSCURA_DIR, force_reinstall=True)
+        print(f"[profiles] Obscura successfully installed to: {p}")
+        return
 
     if args.action == "main":
         asyncio.run(cmd_main_profile())

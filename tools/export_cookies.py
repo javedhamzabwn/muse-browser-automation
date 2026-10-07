@@ -43,7 +43,10 @@ def main():
     if not res.get("ok"):
         raise RuntimeError("cookie export failed: %s" % res.get("error"))
     cookies = res["result"]["cookies"]
-    dl = os.path.join(os.environ["USERPROFILE"], "Downloads")
+    dl = os.environ.get("MUSE_COOKIE_DIR") or os.path.join(
+        os.environ.get("USERPROFILE") or os.path.expanduser("~"), "Downloads"
+    )
+    os.makedirs(dl, exist_ok=True)
     for f in glob.glob(os.path.join(dl, "cookies-export*.txt")):
         try:
             os.remove(f)

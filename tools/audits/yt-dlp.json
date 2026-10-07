@@ -1,0 +1,51 @@
+{
+  "tool_id": "yt-dlp",
+  "name": "yt-dlp Media Extractor",
+  "repository": "https://github.com/yt-dlp/yt-dlp",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\yt-dlp",
+  "commit": "51bab8a0116f4d8004c315706d809782607d5847",
+  "language": "JavaScript",
+  "frameworks": [
+    "Python Package"
+  ],
+  "license": "Custom Open Source",
+  "architecture": "Universal media downloader and metadata extractor in Python",
+  "process_model": "Python library or subprocess executable",
+  "communication_model": "In-process Python API or CLI stdout/JSON",
+  "mcp_support": false,
+  "mcp_transport": null,
+  "native_modules": [],
+  "dependencies": [],
+  "security_concerns": [
+    "Arbitrary media download"
+  ],
+  "entrypoints": [],
+  "source_files_count": 1208,
+  "total_loc": 54522,
+  "capabilities": [
+    "Metadata extraction for 1000+ video/audio platforms",
+    "Direct stream URL extraction",
+    "Audio extraction and format transcoding"
+  ],
+  "limitations": [
+    "Requires FFmpeg for format merging"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "In-process import `import yt_dlp` or CLI wrapper"
+  ],
+  "recommended_integration": "Primary media extraction adapter",
+  "decision": "compatible",
+  "key_source_files": [
+    "bundle\\pyinstaller.py",
+    "bundle\\__init__.py",
+    "devscripts\\bash-completion.py",
+    "devscripts\\check-porn.py",
+    "devscripts\\cli_to_api.py"
+  ],
+  "raw_details": {}
+}

@@ -1,0 +1,524 @@
+{
+  "version": "4.0.0",
+  "updated_at": "2026-10-03T11:00:00Z",
+  "tools": [
+    {
+      "id": "obscura",
+      "name": "Obscura Stealth Engine",
+      "category": "browser",
+      "repository": "https://github.com/h4ckf0r0day/obscura",
+      "homepage": "https://github.com/h4ckf0r0day/obscura",
+      "license": "GPL-3.0",
+      "description": "High-stealth anti-detect browser engine with native fingerprint masking and CDP interface.",
+      "install": {
+        "windows": {
+          "method": "download",
+          "command": "python cli.py install obscura",
+          "binary": "obscura.exe",
+          "dependencies": [
+            "git"
+          ]
+        }
+      },
+      "capabilities": [
+        "javascript",
+        "dom",
+        "cookies",
+        "login",
+        "screenshot",
+        "stealth",
+        "fast_fetch",
+        "cdp"
+      ],
+      "health_check": {
+        "command": "--version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "internal"
+      },
+      "default_priority": 10
+    },
+    {
+      "id": "playwright",
+      "name": "Playwright Chromium Engine",
+      "category": "browser",
+      "repository": "https://github.com/microsoft/playwright-python",
+      "homepage": "https://playwright.dev",
+      "license": "Apache-2.0",
+      "description": "Official Microsoft Playwright Chromium automation engine for headless and headed execution.",
+      "install": {
+        "windows": {
+          "method": "pip",
+          "command": "pip install playwright && python -m playwright install chromium",
+          "binary": "playwright",
+          "dependencies": [
+            "python"
+          ]
+        }
+      },
+      "capabilities": [
+        "javascript",
+        "dom",
+        "cookies",
+        "screenshot",
+        "fast_fetch",
+        "dom_extraction",
+        "cdp"
+      ],
+      "health_check": {
+        "command": "python -m playwright --version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "internal"
+      },
+      "default_priority": 20
+    },
+    {
+      "id": "chrome",
+      "name": "Google Chrome (User Session)",
+      "category": "browser",
+      "repository": "https://www.google.com/chrome/",
+      "homepage": "https://www.google.com/chrome/",
+      "license": "Proprietary",
+      "description": "User's installed Google Chrome instance controlled via CDP and MV3 extension bridge.",
+      "install": {
+        "windows": {
+          "method": "manual",
+          "command": "echo Chrome must be installed via standard installer",
+          "binary": "chrome.exe",
+          "dependencies": []
+        }
+      },
+      "capabilities": [
+        "javascript",
+        "cookies",
+        "login",
+        "screenshot",
+        "cdp",
+        "user_profile"
+      ],
+      "health_check": {
+        "command": "--version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "internal"
+      },
+      "default_priority": 30
+    },
+    {
+      "id": "agent-browser",
+      "name": "Agent Browser CLI",
+      "category": "browser",
+      "repository": "https://github.com/vercel-labs/agent-browser",
+      "homepage": "https://github.com/vercel-labs/agent-browser",
+      "license": "Apache-2.0",
+      "description": "Headless browser automation tool tailored for AI agents, by Vercel Labs.",
+      "install": {
+        "windows": {
+          "method": "npm",
+          "command": "npm install -g agent-browser",
+          "binary": "agent-browser",
+          "dependencies": [
+            "node"
+          ]
+        }
+      },
+      "capabilities": [
+        "javascript",
+        "cookies",
+        "screenshot",
+        "fast_fetch",
+        "dom_extraction"
+      ],
+      "health_check": {
+        "command": "agent-browser --version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "stdio",
+        "command": "agent-browser",
+        "args": [
+          "mcp"
+        ]
+      },
+      "default_priority": 40
+    },
+    {
+      "id": "moli",
+      "name": "Moli Browser Engine",
+      "category": "browser",
+      "repository": "https://github.com/lexmount/moli",
+      "homepage": "https://github.com/lexmount/moli",
+      "license": "MIT",
+      "description": "Lightweight, scriptable browser runtime built for speed and agent automation.",
+      "install": {
+        "windows": {
+          "method": "git",
+          "command": "git clone https://github.com/lexmount/moli external/moli",
+          "binary": "moli",
+          "dependencies": [
+            "git",
+            "node"
+          ]
+        }
+      },
+      "capabilities": [
+        "javascript",
+        "cookies",
+        "screenshot",
+        "fast_fetch"
+      ],
+      "health_check": {
+        "command": "moli --version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": false,
+        "transport": "internal"
+      },
+      "default_priority": 50
+    },
+    {
+      "id": "camoufox",
+      "name": "Camoufox Anti-Detect Browser",
+      "category": "browser",
+      "repository": "https://github.com/daijro/camoufox",
+      "homepage": "https://github.com/daijro/camoufox",
+      "license": "MPL-2.0",
+      "description": "Custom Firefox build with native C++ anti-detect fingerprint spoofing.",
+      "install": {
+        "windows": {
+          "method": "pip",
+          "command": "pip install camoufox && python -m camoufox fetch",
+          "binary": "camoufox",
+          "dependencies": [
+            "python"
+          ]
+        }
+      },
+      "capabilities": [
+        "javascript",
+        "cookies",
+        "stealth",
+        "firefox"
+      ],
+      "health_check": {
+        "command": "python -m camoufox --version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "internal"
+      },
+      "default_priority": 70
+    },
+    {
+      "id": "csi",
+      "name": "CSI Chrome System Interface",
+      "category": "browser",
+      "repository": "https://github.com/ximing/csi",
+      "homepage": "https://github.com/ximing/csi",
+      "license": "MIT",
+      "description": "Direct controller for user's actual Chrome browser via DevTools and system hooks.",
+      "install": {
+        "windows": {
+          "method": "git",
+          "command": "git clone https://github.com/ximing/csi external/csi",
+          "binary": "csi",
+          "dependencies": [
+            "git",
+            "python"
+          ]
+        }
+      },
+      "capabilities": [
+        "javascript",
+        "cookies",
+        "login",
+        "user_profile",
+        "cdp"
+      ],
+      "health_check": {
+        "command": "csi --version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 2
+      },
+      "mcp": {
+        "enabled": false,
+        "transport": "internal"
+      },
+      "default_priority": 80
+    },
+    {
+      "id": "zavora-computer-use",
+      "name": "Zavora Computer Use MCP",
+      "category": "computer_control",
+      "repository": "https://github.com/zavora-ai/computer-use-mcp",
+      "homepage": "https://github.com/zavora-ai/computer-use-mcp",
+      "license": "MIT",
+      "description": "High-performance native Rust/NAPI Windows UI automation, mouse, keyboard, and screen capture.",
+      "install": {
+        "windows": {
+          "method": "npm",
+          "command": "npm install -g zavora-computer-use-mcp",
+          "binary": "zavora-computer-use-mcp",
+          "dependencies": [
+            "node"
+          ]
+        }
+      },
+      "capabilities": [
+        "screenshot",
+        "mouse",
+        "keyboard",
+        "clipboard",
+        "windows",
+        "applications",
+        "filesystem",
+        "processes",
+        "powershell",
+        "ui_automation"
+      ],
+      "health_check": {
+        "command": "npx zavora-computer-use-mcp --version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "stdio",
+        "command": "node",
+        "args": [
+          "external/zavora-computer-use/dist/server.js"
+        ]
+      },
+      "default_priority": 10
+    },
+    {
+      "id": "mcp-computer-use",
+      "name": "Mcp.ComputerUse",
+      "category": "computer_control",
+      "repository": "https://github.com/tdav/Mcp.ComputerUse",
+      "homepage": "https://github.com/tdav/Mcp.ComputerUse",
+      "license": "MIT",
+      "description": ".NET / C# based MCP server for desktop computer control and window interactions.",
+      "install": {
+        "windows": {
+          "method": "git",
+          "command": "git clone https://github.com/tdav/Mcp.ComputerUse external/mcp-computer-use",
+          "binary": "Mcp.ComputerUse.exe",
+          "dependencies": [
+            "git",
+            "dotnet"
+          ]
+        }
+      },
+      "capabilities": [
+        "screenshot",
+        "mouse",
+        "keyboard",
+        "windows",
+        "ui_automation"
+      ],
+      "health_check": {
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "stdio",
+        "command": "mcp-computer-use",
+        "args": []
+      },
+      "default_priority": 20
+    },
+    {
+      "id": "pyautogui-mcp",
+      "name": "PyAutoGUI MCP",
+      "category": "computer_control",
+      "repository": "https://github.com/chigwell/pyautogui-mcp",
+      "homepage": "https://github.com/chigwell/pyautogui-mcp",
+      "license": "MIT",
+      "description": "Python PyAutoGUI-based MCP server providing mouse, keyboard, and screen coordinates.",
+      "install": {
+        "windows": {
+          "method": "pip",
+          "command": "pip install pyautogui-mcp",
+          "binary": "pyautogui-mcp",
+          "dependencies": [
+            "python"
+          ]
+        }
+      },
+      "capabilities": [
+        "screenshot",
+        "mouse",
+        "keyboard",
+        "screen_size"
+      ],
+      "health_check": {
+        "command": "python -m pyautogui_mcp --help",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "stdio",
+        "command": "python",
+        "args": [
+          "-m",
+          "pyautogui_mcp"
+        ]
+      },
+      "default_priority": 40
+    },
+    {
+      "id": "redlib",
+      "name": "Redlib Reddit Fetcher",
+      "category": "reddit",
+      "repository": "https://github.com/redlib-org/redlib-instances",
+      "homepage": "https://old.reddit.com",
+      "license": "AGPL-3.0",
+      "description": "Private, lightweight Reddit frontend mirror fetcher with multi-instance health checks and failover.",
+      "install": {
+        "windows": {
+          "method": "builtin",
+          "command": "echo Built-in HTTP adapter",
+          "binary": "python.exe",
+          "dependencies": [
+            "python"
+          ]
+        }
+      },
+      "capabilities": [
+        "fast_fetch",
+        "reddit_json",
+        "no_bot_detection"
+      ],
+      "health_check": {
+        "command": "curl -s -o NUL -w \"%{http_code}\" -H \"User-Agent: Mozilla/5.0\" https://old.reddit.com",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "internal"
+      },
+      "default_priority": 10
+    },
+    {
+      "id": "yt-dlp",
+      "name": "yt-dlp Media Extractor",
+      "category": "media",
+      "repository": "https://github.com/yt-dlp/yt-dlp",
+      "homepage": "https://github.com/yt-dlp/yt-dlp",
+      "license": "Unlicense",
+      "description": "Command-line audio/video downloader and metadata extractor supporting thousands of media sites.",
+      "install": {
+        "windows": {
+          "method": "pip",
+          "command": "pip install yt-dlp",
+          "binary": "yt-dlp",
+          "dependencies": [
+            "python"
+          ]
+        }
+      },
+      "capabilities": [
+        "video_download",
+        "media_download",
+        "metadata_extraction",
+        "transcoding_support"
+      ],
+      "health_check": {
+        "command": "yt-dlp --version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "internal"
+      },
+      "default_priority": 10
+    },
+    {
+      "id": "http_static",
+      "name": "Tier 0 Fast HTTP Fetcher",
+      "category": "fetching",
+      "repository": "https://github.com/rehantheorylab-pixel/muse-browser-automation",
+      "homepage": "https://docs.python.org/3/library/urllib.request.html",
+      "license": "Apache-2.0",
+      "description": "Ultra-fast zero-overhead HTTP/HTTPS static fetcher (<50ms) using standard Python networking.",
+      "install": {
+        "windows": {
+          "method": "builtin",
+          "command": "echo Built-in Python library",
+          "binary": "python.exe",
+          "dependencies": [
+            "python"
+          ]
+        }
+      },
+      "capabilities": [
+        "fast_fetch",
+        "headers",
+        "streaming"
+      ],
+      "health_check": {
+        "command": "python -c \"import urllib.request; print('ok')\"",
+        "timeout_sec": 3.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": true,
+        "transport": "internal"
+      },
+      "default_priority": 5
+    },
+    {
+      "id": "ffmpeg",
+      "name": "FFmpeg Transcoder",
+      "category": "utility",
+      "repository": "https://github.com/FFmpeg/FFmpeg",
+      "homepage": "https://ffmpeg.org",
+      "license": "LGPL-2.1",
+      "description": "Universal multimedia processing and format conversion framework.",
+      "install": {
+        "windows": {
+          "method": "manual",
+          "command": "winget install Gyan.FFmpeg",
+          "binary": "ffmpeg.exe",
+          "dependencies": []
+        }
+      },
+      "capabilities": [
+        "transcoding",
+        "audio_extraction",
+        "video_processing"
+      ],
+      "health_check": {
+        "command": "ffmpeg -version",
+        "timeout_sec": 5.0,
+        "expected_exit_code": 0
+      },
+      "mcp": {
+        "enabled": false,
+        "transport": "internal"
+      },
+      "default_priority": 90
+    }
+  ]
+}

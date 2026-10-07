@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Synthetic Test Suite — Muse 3.0</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .section { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+    .hidden { display: none; }
+    #scroll-box { height: 100px; overflow-y: scroll; border: 1px solid blue; }
+  </style>
+</head>
+<body>
+  <h1>Synthetic Browser Test Target</h1>
+
+  <!-- 1. Dynamic ID with stable text & role -->
+  <div class="section" id="sec-dynamic">
+    <h3>1. Dynamic ID Element</h3>
+    <button id="btn-dyn-84920" class="btn primary" role="button">Submit Order</button>
+    <span id="order-status" style="margin-left: 10px;">Pending</span>
+  </div>
+
+  <!-- 2. Accessibility label / name -->
+  <div class="section" id="sec-a11y">
+    <h3>2. Accessible Name Only</h3>
+    <button aria-label="Confirm Purchase" class="icon-btn">🛒</button>
+    <input type="text" aria-label="Shipping Address" placeholder="Enter address" />
+  </div>
+
+  <!-- 3. Shadow DOM component -->
+  <div class="section" id="sec-shadow">
+    <h3>3. Shadow DOM Web Component</h3>
+    <div id="shadow-host"></div>
+  </div>
+
+  <!-- 4. Nested Iframe -->
+  <div class="section" id="sec-iframe">
+    <h3>4. Nested Iframe</h3>
+    <iframe id="child-frame" src="frame.html" width="100%" height="120"></iframe>
+  </div>
+
+  <!-- 5. Delayed element (appears after 200ms) -->
+  <div class="section" id="sec-delayed">
+    <h3>5. Delayed Content</h3>
+    <div id="delayed-container">Loading...</div>
+  </div>
+
+  <!-- 6. Modal Dialog -->
+  <div class="section" id="sec-modal">
+    <h3>6. Dialog Modal</h3>
+    <button id="open-modal-btn">Open Dialog</button>
+    <dialog id="test-dialog">
+      <p>Security Confirmation Dialog</p>
+      <button id="confirm-dialog-btn">Accept & Close</button>
+    </dialog>
+  </div>
+
+  <!-- 7. Contenteditable -->
+  <div class="section" id="sec-editable">
+    <h3>7. Contenteditable</h3>
+    <div id="rich-editor" contenteditable="true" style="min-height: 40px; border: 1px dashed #666; padding: 5px;">
+      Type formatted notes here...
+    </div>
+  </div>
+
+  <!-- 8. Scroll Container -->
+  <div class="section" id="sec-scroll">
+    <h3>8. Infinite Scroll List</h3>
+    <div id="scroll-box">
+      <div style="height: 500px; padding: 10px;">
+        <p>Top item</p>
+        <p style="margin-top: 300px;" id="deep-item">Deep Hidden Item At Bottom</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. Dynamic click behavior
+    document.getElementById('btn-dyn-84920').addEventListener('click', () => {
+      document.getElementById('order-status').textContent = 'Order Verified';
+    });
+
+    // 3. Attach Open Shadow Root
+    const host = document.getElementById('shadow-host');
+    const shadow = host.attachShadow({ mode: 'open' });
+    shadow.innerHTML = `
+      <div style="background: #eef; padding: 8px;">
+        <p>Inside Shadow Root</p>
+        <button id="shadow-btn" role="button">Shadow Save</button>
+        <input id="shadow-input" type="text" placeholder="Shadow field" />
+      </div>
+    `;
+
+    // 5. Delayed element insertion
+    setTimeout(() => {
+      const container = document.getElementById('delayed-container');
+      container.innerHTML = '<button id="lazy-btn" class="active">Ready Action</button>';
+    }, 200);
+
+    // 6. Dialog toggle
+    const dialog = document.getElementById('test-dialog');
+    document.getElementById('open-modal-btn').addEventListener('click', () => dialog.showModal());
+    document.getElementById('confirm-dialog-btn').addEventListener('click', () => dialog.close());
+  </script>
+</body>
+</html>

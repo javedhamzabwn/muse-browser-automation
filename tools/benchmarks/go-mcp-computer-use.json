@@ -1,0 +1,36 @@
+{
+  "tool_id": "go-mcp-computer-use",
+  "category": "computer_control",
+  "iterations": 3,
+  "timestamp": "2026-10-03 11:15:05Z",
+  "metrics": {
+    "screenshot_ms": {
+      "count": 3,
+      "min_ms": 8.37,
+      "p50_ms": 9.31,
+      "p95_ms": 10.95,
+      "p99_ms": 10.95,
+      "mean_ms": 9.54,
+      "failure_rate": 0.0
+    },
+    "cursor_pos_ms": {
+      "count": 3,
+      "min_ms": 0.07,
+      "p50_ms": 0.08,
+      "p95_ms": 0.11,
+      "p99_ms": 0.11,
+      "mean_ms": 0.08,
+      "failure_rate": 0.0
+    },
+    "window_list_ms": {
+      "count": 3,
+      "min_ms": 0.02,
+      "p50_ms": 0.02,
+      "p95_ms": 0.03,
+      "p99_ms": 0.03,
+      "mean_ms": 0.02,
+      "failure_rate": 0.0
+    }
+  },
+  "summary": "go-mcp-computer-use: screenshot p50=9.31ms"
+}

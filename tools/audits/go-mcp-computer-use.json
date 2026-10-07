@@ -1,0 +1,53 @@
+{
+  "tool_id": "go-mcp-computer-use",
+  "name": "Go Computer Use MCP",
+  "repository": "https://github.com/coff33ninja/go-mcp-computer-use",
+  "target_dir": "D:\\Javed Hamza\\Documents\\ai_projects\\muse\\muse-browser-automation\\external\\go-mcp-computer-use",
+  "commit": "612ddf9bf698f71c9fba3a49d3161b5f9707f749",
+  "language": "Python",
+  "frameworks": [
+    "Go Modules"
+  ],
+  "license": "Apache-2.0",
+  "architecture": "Compiled Go desktop automation daemon exposing MCP",
+  "process_model": "Single compiled Go binary running native Windows API calls",
+  "communication_model": "stdio",
+  "mcp_support": true,
+  "mcp_transport": "stdio",
+  "native_modules": [
+    "Static Go binary"
+  ],
+  "dependencies": [],
+  "security_concerns": [
+    "System input synthesis"
+  ],
+  "entrypoints": [],
+  "source_files_count": 211,
+  "total_loc": 41850,
+  "capabilities": [
+    "Zero runtime dependencies (single static binary)",
+    "Fast startup (<10ms)",
+    "Mouse, keyboard, and screen capture"
+  ],
+  "limitations": [
+    "Requires Go compiler or precompiled binary for Windows"
+  ],
+  "platform_support": [
+    "windows",
+    "linux",
+    "darwin"
+  ],
+  "integration_options": [
+    "Compile executable and launch via stdio MCP bridge"
+  ],
+  "recommended_integration": "Subprocess stdio MCP wrapper",
+  "decision": "compatible",
+  "key_source_files": [
+    "cmd\\benchmark\\main.go",
+    "cmd\\credit-audit\\main.go",
+    "cmd\\mcp-server\\license.go",
+    "cmd\\mcp-server\\main.go",
+    "cmd\\ml-eval\\main.go"
+  ],
+  "raw_details": {}
+}

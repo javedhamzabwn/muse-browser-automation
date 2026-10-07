@@ -1,0 +1,42 @@
+{
+  "category": "MCP integration tests",
+  "mcp_url": "http://127.0.0.1:18010/mcp",
+  "results": [
+    {
+      "test_name": "mcp_initialize",
+      "target_url": "http://127.0.0.1:18010/mcp",
+      "success": false,
+      "duration_ms": 10002.02,
+      "details": {},
+      "error": "timed out"
+    },
+    {
+      "test_name": "mcp_tools_list",
+      "target_url": "http://127.0.0.1:18010/mcp",
+      "success": false,
+      "duration_ms": 10013.25,
+      "details": {},
+      "error": "timed out"
+    },
+    {
+      "test_name": "mcp_tool_call_tool_status",
+      "target_url": "http://127.0.0.1:18010/mcp",
+      "success": false,
+      "duration_ms": 10001.76,
+      "details": {},
+      "error": "timed out"
+    },
+    {
+      "test_name": "mcp_error_handling",
+      "target_url": "http://127.0.0.1:18010/mcp",
+      "success": false,
+      "duration_ms": 10013.22,
+      "details": {},
+      "error": "timed out"
+    }
+  ],
+  "total": 4,
+  "passed": 0,
+  "failed": 4,
+  "duration_ms": 40030.43
+}

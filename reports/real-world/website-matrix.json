@@ -1,0 +1,101 @@
+{
+  "category": "Real website tests",
+  "backend": "playwright",
+  "results": [
+    {
+      "category": "Static HTML",
+      "url": "https://httpbin.org/html",
+      "backend": "playwright",
+      "success": true,
+      "status_code": 200,
+      "duration_ms": 2404.86,
+      "capabilities_verified": {
+        "navigation": "PASS",
+        "html": "PASS",
+        "dom": "PARTIAL"
+      },
+      "blocked_by_site": false,
+      "error": null
+    },
+    {
+      "category": "Dynamic JS / Delay",
+      "url": "https://httpbin.org/delay/1",
+      "backend": "playwright",
+      "success": true,
+      "status_code": 200,
+      "duration_ms": 13133.91,
+      "capabilities_verified": {
+        "navigation": "PASS",
+        "html": "PASS",
+        "dom": "PARTIAL"
+      },
+      "blocked_by_site": false,
+      "error": null
+    },
+    {
+      "category": "Forms",
+      "url": "https://httpbin.org/forms/post",
+      "backend": "playwright",
+      "success": true,
+      "status_code": 200,
+      "duration_ms": 944.03,
+      "capabilities_verified": {
+        "navigation": "PASS",
+        "html": "PASS",
+        "dom": "PARTIAL"
+      },
+      "blocked_by_site": false,
+      "error": null
+    },
+    {
+      "category": "Cookies",
+      "url": "https://httpbin.org/cookies",
+      "backend": "playwright",
+      "success": true,
+      "status_code": 200,
+      "duration_ms": 2084.74,
+      "capabilities_verified": {
+        "navigation": "PASS",
+        "html": "FAIL",
+        "dom": "PARTIAL"
+      },
+      "blocked_by_site": false,
+      "error": null
+    },
+    {
+      "category": "Redirects",
+      "url": "https://httpbin.org/redirect/2",
+      "backend": "playwright",
+      "success": true,
+      "status_code": 200,
+      "duration_ms": 4219.6,
+      "capabilities_verified": {
+        "navigation": "PASS",
+        "html": "PASS",
+        "dom": "PARTIAL"
+      },
+      "blocked_by_site": false,
+      "error": null
+    },
+    {
+      "category": "SPA / Real Site",
+      "url": "https://news.ycombinator.com",
+      "backend": "playwright",
+      "success": true,
+      "status_code": 200,
+      "duration_ms": 13027.04,
+      "capabilities_verified": {
+        "navigation": "PASS",
+        "html": "PASS",
+        "dom": "PASS"
+      },
+      "blocked_by_site": false,
+      "error": null
+    }
+  ],
+  "total": 6,
+  "passed": 6,
+  "blocked_by_site": 0,
+  "failed": 0,
+  "duration_ms": 35815.62
+}

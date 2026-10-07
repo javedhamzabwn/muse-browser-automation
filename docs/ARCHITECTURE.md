@@ -1,75 +1,91 @@
-# Architecture
+# Muse Browser Automation 4.0 — Architecture
 
-`muse-browser-automation` drives a real desktop browser locally on the
-user's PC. Everything runs on loopback; the agent's brain (Muse) talks to
-the PC over the user's own tunnel, but **no browsing traffic or control
-plane ever leaves the machine except through a tunnel the user sets up
-themselves**.
+## Overview
 
-## Component diagram
+Muse Browser Automation 4.0 is a unified, blazing-fast, self-healing browser automation and web fetching platform for AI agents. It operates under a strict **Single-Port Principle**, multiplexing MCP, REST APIs, WebSockets, Server-Sent Events, dashboards, and remote tunnels through one local port (`127.0.0.1:18010`).
 
 ```
-Chrome (personal)                          Obscura (agent browser, default)
-┌─────────────────────────┐                ┌──────────────────────────────┐
-│ MV3 extension           │                │ from-scratch Rust engine   │
-│ "Muse Browser Control"  │                │ (not Chromium)             │
-│ background service      │                │ CDP :9222                  │
-│ worker: debugger        │                └──────────────┬───────────────┘
-│ permission, CDP on      │                               │ obscura_helper.py
-│ BACKGROUND tabs         │                               │ profiles.py
-│ (no-focus automation)   │                               │
-└────────────┬────────────┘                               │
-             │ WS 127.0.0.1:19091                         │
-             ▼                                            ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ simpled.py — loopback daemon                                    │
-│   HTTP 127.0.0.1:18010  POST /tool  {"tool": dotted.name, ...}  │
-│   WebSocket 127.0.0.1:19091  (extension <-> daemon bridge)      │
-└────────────┬────────────────────────────────────────────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│ mcp_server.py — MCP     │
-│ server exposing daemon  │
-│ tools to the agent      │
-└─────────────────────────┘
+                +-----------------------------------------+
+                |        AI Agent / MCP Client            |
+                +--------------------+--------------------+
+                                     |
+                    HTTP / JSON-RPC / WebSocket
+                                     v
++-------------------------------------------------------------------------+
+|                  MUSE SINGLE-PORT RUNTIME (127.0.0.1:18010)             |
+|                                                                         |
+|  /mcp                 /api/browser/...       /ws           /dashboard   |
+|  (JSON-RPC 2.0)       (REST Endpoints)       (Multiplex)   (Web UI)     |
+|                                                                         |
+|  /health              /status                /events       /tool        |
+|  (Probes)             (Telemetry)            (SSE Stream)  (Legacy)     |
++------------------------------------+------------------------------------+
+                                     |
+             +-----------------------+-----------------------+
+             v                                               v
++-------------------------+                     +-------------------------+
+|   UNIVERSAL FETCH ENGINE|                     |   BROWSER RUNTIME POOL  |
+|                         |                     |                         |
+|  - Requirement Planner  |                     |  - Playwright Chromium  |
+|  - 5-Tier Fallback      |                     |  - Google Chrome (CDP)  |
+|  - Circuit Breakers     |                     |  - Obscura Stealth      |
+|  - Failure Memory       |                     |  - Agent-Browser CLI    |
+|  - SQLite L1/L2 Cache   |                     |  - Moli / Lightpanda    |
++------------+------------+                     +------------+------------+
+             |                                               |
+             +-----------------------+-----------------------+
+                                     v
+                      +-----------------------------+
+                      |    TARGET WEBSITES & APIS   |
+                      +-----------------------------+
 ```
 
-Dotted tool names (e.g. `cookies.export_cdp`, `tabs.snapshot`) are called
-over HTTP `/tool`; the daemon relays browser work to the extension over
-the WebSocket. The extension uses the `debugger` permission to drive tabs
-via CDP (`Input.dispatchMouseEvent`, `Runtime.evaluate`,
-`Page.captureScreenshot`) **without activating them** — automation never
-steals window focus.
+---
 
-## Key files
+## Core Components
 
-| File | Role |
-|------|------|
-| `extension/manifest.json`, `extension/background.js` | MV3 extension, debugger permission, background-tab CDP |
-| `daemon/simpled.py` | loopback daemon: HTTP `:18010` `/tool` + WS `:19091` |
-| `daemon/mcp_server.py` | MCP server fronting the daemon for agents |
-| `install/StartMuseMCP.vbs` | login autostart for the daemon (generic, no hardcoded paths) |
-| `install/install.ps1` | idempotent Windows installer |
-| `tools/export_cookies.py` | daily CDP cookie export → `Downloads/cookies-export.txt` (Netscape) |
-| `obscura/obscura_helper.py` | CDP driver for Obscura (`:9222`) |
-| `obscura/profiles.py` | Obscura profile manager (main/temp/empty/sync/list/cleanup) |
+### 1. Single-Port Multiplexed Daemon (`daemon/simpled.py`)
+- Listens on `127.0.0.1:18010`.
+- Routes all incoming traffic according to URL path:
+  - `/mcp` — Model Context Protocol JSON-RPC 2.0 endpoint (tools, resources, prompts).
+  - `/api/browser/...` — RESTful browser lifecycle and inspection APIs.
+  - `/ws` — Bidirectional WebSocket for real-time streaming, element highlighting, and actions.
+  - `/events` — SSE stream for task progress, DOM mutations, and agent status.
+  - `/dashboard`, `/` — Embedded HTML/CSS control center with live telemetry.
+  - `/health`, `/status` — JSON health checks and runtime diagnostics.
+  - `/tool` — Backward-compatible action dispatch.
 
-## Ports (all 127.0.0.1, loopback-only)
+### 2. Central Tool Registry (`core/tools/`)
+- Dynamic capability matching instead of hardcoded tool names.
+- Manifest definitions for all supported tools:
+  - Categories: `browser`, `fetcher`, `parser`, `utility`.
+  - Capabilities: `javascript`, `cookies`, `login`, `screenshot`, `fast_fetch`, `stealth`, `media_download`, `transcoding`.
+- Auto-detection across system paths, virtual environments, and custom directories.
+- Non-blocking active health checks and version extraction.
+- Single and batch tool installer framework.
 
-| Port | Service |
-|------|---------|
-| 18010 | daemon HTTP `/tool` (dotted method names) |
-| 19091 | daemon WebSocket (extension bridge) |
-| 9222  | Obscura CDP (main profile) |
+### 3. Universal Fetch Engine (`core/fetch/`)
+- Tiered execution strategy:
+  - **Tier 0**: Python `urllib` / `aiohttp` static fetcher (< 50ms).
+  - **Tier 1**: Lightweight headless browser / parser (Lightpanda, Redlib failover).
+  - **Tier 2**: Full headless JavaScript execution (Playwright, Obscura).
+  - **Tier 3**: Authenticated real user browser (Chrome profile, Camoufox).
+  - **Tier 4**: Human assistance request for irreversible CAPTCHA / 2FA.
+- Persistent SQLite cache with SHA-256 keying and TTL management.
+- Normalized output schema (`FetchResult`) returning clean text, markdown, HTML, metadata, and extracted links.
 
-## Trust boundaries
+### 4. Self-Healing Fallback & Resilience (`core/fetch/fallback.py`)
+- Error classifier categorizing HTTP and browser errors into 10 deterministic types.
+- Per-tool circuit breakers with configurable failure thresholds and cooldown periods.
+- Failure memory tracking domain-specific tool incompatibilities to prevent repeated failure loops.
 
-- The daemon binds loopback only and performs no auth — it trusts the local
-  machine. **Never port-forward these ports publicly** without adding
-  authentication in front of them.
-- The extension's `<all_urls>` + `debugger` permissions are powerful by
-  design: only load it from this repo, and only on a machine you control.
-- Cookie exports (`cookies-export.txt`) are session credentials — they stay
-  in the user's Downloads folder and are never uploaded anywhere by these
-  tools.
+### 5. Session & Profile Management (`core/sessions/manager.py`)
+- Isolated browser profiles per task or user persona.
+- Automatic storage state isolation (cookies, localStorage, indexedDB).
+- Safe cookie export with strict terminal and log masking (never prints raw session tokens).
+- Explicit deletion confirmation safeguards.
+
+### 6. Remote Tunneling & ngrok Detection
+- Automatically detects active ngrok tunnels via local inspection API (`127.0.0.1:4040`).
+- Dynamically advertises public remote endpoints (`https://<ngrok-domain>/mcp`).
+- Requires zero extra public ports; ngrok tunnels directly to `18010`.

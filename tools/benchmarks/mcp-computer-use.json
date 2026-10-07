@@ -1,0 +1,36 @@
+{
+  "tool_id": "mcp-computer-use",
+  "category": "computer_control",
+  "iterations": 3,
+  "timestamp": "2026-10-03 11:15:05Z",
+  "metrics": {
+    "screenshot_ms": {
+      "count": 3,
+      "min_ms": 8.45,
+      "p50_ms": 10.82,
+      "p95_ms": 12.36,
+      "p99_ms": 12.36,
+      "mean_ms": 10.54,
+      "failure_rate": 0.0
+    },
+    "cursor_pos_ms": {
+      "count": 3,
+      "min_ms": 0.06,
+      "p50_ms": 0.08,
+      "p95_ms": 0.08,
+      "p99_ms": 0.08,
+      "mean_ms": 0.08,
+      "failure_rate": 0.0
+    },
+    "window_list_ms": {
+      "count": 3,
+      "min_ms": 0.02,
+      "p50_ms": 0.02,
+      "p95_ms": 0.02,
+      "p99_ms": 0.02,
+      "mean_ms": 0.02,
+      "failure_rate": 0.0
+    }
+  },
+  "summary": "mcp-computer-use: screenshot p50=10.82ms"
+}

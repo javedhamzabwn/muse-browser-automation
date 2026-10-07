@@ -41,7 +41,7 @@ if ($major -lt 3 -or ($major -eq 3 -and $minor -lt 10)) {
 Write-Host "[ok] $pyVer"
 
 # --- 2. Copy repo files ------------------------------------------------------
-foreach ($dir in @("extension", "daemon", "tools")) {
+foreach ($dir in @("core", "extension", "daemon", "tools", "obscura")) {
   $src = Join-Path $RepoDir $dir
   $dst = Join-Path $Target $dir
   if (-not (Test-Path $src)) { Write-Host "ERROR: missing in repo: $src" -ForegroundColor Red; exit 1 }
@@ -49,12 +49,26 @@ foreach ($dir in @("extension", "daemon", "tools")) {
   Copy-Item -Path (Join-Path $src "*") -Destination $dst -Recurse -Force
   Write-Host "[ok] copied $dir -> $dst"
 }
+Copy-Item -Path (Join-Path $RepoDir "cli.py") -Destination (Join-Path $Target "cli.py") -Force
+Write-Host "[ok] copied cli.py -> $Target"
 
-# --- 3. Python deps ----------------------------------------------------------
-Write-Host "Installing Python dependency: websockets ..."
-& python -m pip install --quiet websockets
-if ($LASTEXITCODE -ne 0) { Write-Host "ERROR: pip install websockets failed." -ForegroundColor Red; exit 1 }
-Write-Host "[ok] websockets"
+# --- 3. Python deps & Engines ------------------------------------------------
+Write-Host "Installing Python dependencies: websockets playwright aiohttp ..."
+& python -m pip install --quiet websockets playwright aiohttp
+if ($LASTEXITCODE -ne 0) { Write-Host "ERROR: pip install failed." -ForegroundColor Red; exit 1 }
+Write-Host "[ok] websockets, playwright & aiohttp"
+
+Write-Host "Ensuring Playwright Chromium is installed..."
+& python -m playwright install chromium
+Write-Host "[ok] Playwright Chromium"
+
+Write-Host "Auto-provisioning Obscura stealth engine..."
+try {
+  & python -c "from core.obscura_downloader import ensure_obscura_installed; ensure_obscura_installed()"
+  Write-Host "[ok] Obscura binary verified"
+} catch {
+  Write-Host "WARN: Obscura download error: $_" -ForegroundColor Yellow
+}
 
 # --- 4. Autostart on login ----------------------------------------------------
 Copy-Item -Path $VbsSrc -Destination (Join-Path $Startup "StartMuseMCP.vbs") -Force
@@ -116,4 +130,8 @@ try {
   Write-Host "WARN: http://127.0.0.1:18010/tool did not answer. Check that the daemon is running, then retry." -ForegroundColor Yellow
 }
 Write-Host ""
-Write-Host "Done. Complete the manual Chrome steps above, then the agent can drive this PC's browser."
+Write-Host "================ MUSE BLAZING FAST 3.0 READY ================" -ForegroundColor Green
+Write-Host "Real-Time Dashboard: http://127.0.0.1:18010/dashboard"
+Write-Host "Unified CLI        : python $Target\cli.py status"
+Write-Host "Done. Complete the manual Chrome steps above, then AI agents can drive this PC's browser with universal zero-shot accuracy."
+Write-Host "=============================================================="
