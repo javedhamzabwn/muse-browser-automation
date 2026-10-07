@@ -952,6 +952,7 @@ MCP_TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
+              "backend": {"type": "string", "description": "Optional computer backend (auto, pyautogui-mcp, zavora-computer-use, mcp-computer-use)"},
                 "x": {
                     "type": "number"
                 },
@@ -982,6 +983,7 @@ MCP_TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
+              "backend": {"type": "string", "description": "Optional computer backend (auto, pyautogui-mcp, zavora-computer-use, mcp-computer-use)"},
                 "text": {
                     "type": "string"
                 }
@@ -996,7 +998,8 @@ MCP_TOOLS = [
         "description": "Capture full desktop screenshot as base64 PNG.",
         "inputSchema": {
             "type": "object",
-            "properties": {}
+            "properties": {
+              "backend": {"type": "string", "description": "Optional computer backend (auto, pyautogui-mcp, zavora-computer-use, mcp-computer-use)"},}
         }
     },
     {
@@ -1004,7 +1007,8 @@ MCP_TOOLS = [
         "description": "List all open desktop application windows with handles and bounds.",
         "inputSchema": {
             "type": "object",
-            "properties": {}
+            "properties": {
+              "backend": {"type": "string", "description": "Optional computer backend (auto, pyautogui-mcp, zavora-computer-use, mcp-computer-use)"},}
         }
     },
     {
@@ -1861,27 +1865,43 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
 
     # Computer Control Handlers
     if name == "computer_click":
-        from core.tools.adapters.computer.pyautogui_adapter import PyAutoGUIAdapter
-        comp = PyAutoGUIAdapter()
+        comp = await get_computer_adapter(args)
         res = await comp.mouse_click(int(args["x"]), int(args["y"]), button=args.get("button", "left"), clicks=int(args.get("clicks", 1)))
         return {"success": res.success, "action": res.action, "details": res.details, "error": res.error}
 
     if name == "computer_type":
-        from core.tools.adapters.computer.pyautogui_adapter import PyAutoGUIAdapter
-        comp = PyAutoGUIAdapter()
+        comp = await get_computer_adapter(args)
         res = await comp.type_text(args["text"])
         return {"success": res.success, "action": res.action, "details": res.details}
 
+    # --- Computer Routing Logic ---
+    async def get_computer_adapter(args: dict):
+        pref = args.get("backend", "auto")
+        if pref == "pyautogui-mcp":
+            from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
+            return McpComputerAdapter("pyautogui-mcp", ["--transport", "stdio"])
+        elif pref == "zavora-computer-use" or pref == "zavora":
+            from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
+            import sys, os
+            z_path = os.path.join(os.getcwd(), "external", "zavora-computer-use", "dist", "server.js")
+            return McpComputerAdapter("node", [z_path])
+        elif pref == "mcp-computer-use":
+            from core.tools.adapters.computer.mcp_adapter import McpComputerAdapter
+            import sys, os
+            exe_path = os.path.join(os.getcwd(), "external", "mcp-computer-use", "bin", "mcp-computer-use.exe")
+            return McpComputerAdapter(exe_path, [])
+        else:
+            from core.tools.adapters.computer.pyautogui_adapter import PyAutoGUIAdapter
+            return PyAutoGUIAdapter()
+
     if name == "computer_screenshot":
         import base64
-        from core.tools.adapters.computer.pyautogui_adapter import PyAutoGUIAdapter
-        comp = PyAutoGUIAdapter()
+        comp = await get_computer_adapter(args)
         png = await comp.take_screenshot()
         return {"format": "png", "base64": base64.b64encode(png).decode("utf-8")}
 
     if name == "computer_windows":
-        from core.tools.adapters.computer.pyautogui_adapter import PyAutoGUIAdapter
-        comp = PyAutoGUIAdapter()
+        comp = await get_computer_adapter(args)
         wins = await comp.list_windows()
         return [{"hwnd": w.hwnd, "title": w.title, "bounds": w.bounds} for w in wins]
 
