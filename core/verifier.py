@@ -43,7 +43,9 @@ CAPTURE_STATE_JS = r"""
         active_tag: active ? active.tagName.toLowerCase() : '',
         active_id: active ? active.id : '',
         modal_open: dialogs.length > 0,
-        readyState: document.readyState
+        readyState: document.readyState,
+        scroll_y: window.scrollY,
+        scroll_x: window.scrollX
     };
 })();
 """
@@ -97,6 +99,8 @@ class ActionVerifier(BaseActionVerifier):
         before_title = before_state.get("title", "")
         before_mutations = before_state.get("mutations", 0)
         before_modal = before_state.get("modal_open", False)
+        before_sy = before_state.get("scroll_y", 0)
+        before_sx = before_state.get("scroll_x", 0)
 
         last_state = before_state
 
@@ -114,11 +118,13 @@ class ActionVerifier(BaseActionVerifier):
             curr_title = curr.get("title", "")
             curr_mutations = curr.get("mutations", 0)
             curr_modal = curr.get("modal_open", False)
+            curr_sy = curr.get("scroll_y", 0)
+            curr_sx = curr.get("scroll_x", 0)
 
             url_changed = curr_url != before_url
             title_changed = curr_title != before_title
             dom_mutated = (curr_mutations > before_mutations) or (curr_modal != before_modal)
-            page_changed = url_changed or title_changed or dom_mutated
+            page_changed = url_changed or title_changed or dom_mutated or curr_sy != before_sy or curr_sx != before_sx
 
             if expected_change:
                 if expected_change == "url_change" and url_changed:

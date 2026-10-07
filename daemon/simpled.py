@@ -1544,7 +1544,7 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
                     # If provided by the AI, they are in the 1000-based normalized space.
                     sx = args['x'] if is_css else f"({args['x']} / 1000) * window.innerWidth"
                     sy = args['y'] if is_css else f"({args['y']} / 1000) * window.innerHeight"
-                    js = f"let el = document.elementFromPoint({sx}, {sy}); if(el){{ el.value = '{val}'; el.dispatchEvent(new Event('change', {{bubbles: true}})); return el.value; }} return null;"
+                    js = f"(() => {{ let el = document.elementFromPoint({sx}, {sy}); if(el){{ el.value = '{val}'; el.dispatchEvent(new Event('change', {{bubbles: true}})); return el.value; }} return null; }})()"
                     args["js"] = js
                     return await call_extension("page.evaluate", args)
                 elif name == "browser_fill":
@@ -1796,7 +1796,7 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
         dy = 500 if args.get("direction", "down") == "down" else -500
         if "amount" in args:
             dy = int(args["amount"])
-        res = await router.execute_action(tid, "scroll", {"x": 0, "y": dy}, backend=b)
+        res = await router.execute_action(tid, "scroll", {"delta_x": 0, "delta_y": dy}, backend=b)
         return res.to_dict()
 
     if name in ("browser_screenshot", "screenshot"):
@@ -1996,7 +1996,7 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
             is_css = args.get("_is_css", False)
             sx = args['x'] if is_css else f"({args['x']} / 1000) * window.innerWidth"
             sy = args['y'] if is_css else f"({args['y']} / 1000) * window.innerHeight"
-            js = f"let el = document.elementFromPoint({sx}, {sy}); if(el){{ el.value = '{val}'; el.dispatchEvent(new Event('change', {{bubbles: true}})); return el.value; }} return null;"
+            js = f"(() => {{ let el = document.elementFromPoint({sx}, {sy}); if(el){{ el.value = '{val}'; el.dispatchEvent(new Event('change', {{bubbles: true}})); return el.value; }} return null; }})()"
             return await b.evaluate(tid, js)
         raise RuntimeError(f"Backend {b.backend_type().name} does not support evaluate")
 
