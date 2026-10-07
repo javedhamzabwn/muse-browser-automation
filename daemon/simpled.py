@@ -1794,9 +1794,15 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
 
     if name == "browser_scroll":
         dy = 500 if args.get("direction", "down") == "down" else -500
-        if "amount" in args:
-            dy = int(args["amount"])
-        res = await router.execute_action(tid, "scroll", {"delta_x": 0, "delta_y": dy}, backend=b)
+        amount_val = args.get("amount") or args.get("deltaY") or args.get("delta_y") or args.get("y")
+        if amount_val is not None:
+            amount = int(amount_val)
+            # If they provided an exact signed deltaY (e.g. -300), use it directly if direction isn't explicitly overriding
+            if "direction" in args:
+                dy = amount if args["direction"] == "down" else -amount
+            else:
+                dy = amount
+        res = await router.execute_action(tid, "scroll", {"delta_x": int(args.get("deltaX", args.get("delta_x", args.get("x", 0)))), "delta_y": dy}, backend=b)
         return res.to_dict()
 
     if name in ("browser_screenshot", "screenshot"):
