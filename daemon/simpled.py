@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import asyncio
 import json
+import asyncio
+start_semaphore = asyncio.Semaphore(2)
 import logging
 import os
 import sys
@@ -1642,14 +1644,16 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
 
     if name.startswith("browser_") or name in ("click", "type", "navigate", "screenshot", "tabs_list", "tab_create", "tab_switch", "tab_close"):
         if not await b.is_connected():
-            await b.start()
+            async with start_semaphore: await b.start()
             
         if needs_tab and not tid:
             tabs = await b.list_tabs()
-            if not tabs:
+            valid_tabs = [t for t in tabs if not str(t.get("url", "")).startswith("chrome-extension://") and not str(t.get("url", "")).startswith("devtools://")]
+            if not valid_tabs:
                 await b.create_tab()
                 tabs = await b.list_tabs()
-            tid = str(tabs[0]["tabId"] if tabs else "")
+                valid_tabs = [t for t in tabs if not str(t.get("url", "")).startswith("chrome-extension://") and not str(t.get("url", "")).startswith("devtools://")]
+            tid = str(valid_tabs[-1]["tabId"] if valid_tabs else (tabs[-1]["tabId"] if tabs else ""))
     else:
         # Non-browser tools or tools that handle their own routing (like browser_task)
         pass
@@ -1714,7 +1718,7 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
 
             b_inst = await router.resolve_backend(BrowserBackendType.AUTO)
             if not await b_inst.is_connected():
-                await b_inst.start()
+                async with start_semaphore: await b_inst.start()
             tabs_inst = await b_inst.list_tabs()
             cur_tid = tabs_inst[0]["tabId"] if tabs_inst else await b_inst.create_tab(url or "about:blank")
             if url and tabs_inst:
@@ -2198,7 +2202,7 @@ async def handle_browser_api(request: web.Request) -> web.Response:
             pref = body.get('backend', 'auto') if isinstance(body, dict) else 'auto'
             b = await router.resolve_backend(pref)
             if not await b.is_connected():
-                await b.start()
+                async with start_semaphore: await b.start()
             tabs = await b.list_tabs()
             return web.json_response({"ok": True, "result": tabs})
 
@@ -2206,7 +2210,9 @@ async def handle_browser_api(request: web.Request) -> web.Response:
             pref = body.get('backend', 'auto') if isinstance(body, dict) else 'auto'
             b = await router.resolve_backend(pref)
             tabs = await b.list_tabs()
-            tid = str(body.get("tabId") or (tabs[0]["tabId"] if tabs else ""))
+            valid_tabs = [t for t in tabs if not str(t.get("url", "")).startswith("chrome-extension://") and not str(t.get("url", "")).startswith("devtools://")]
+            default_tid = valid_tabs[-1]["tabId"] if valid_tabs else (tabs[-1]["tabId"] if tabs else "")
+            tid = str(body.get("tabId") or default_tid)
             model = await b.build_page_model(tid)
             fmt = body.get("format", "compact")
             if fmt == "markdown":
@@ -2219,7 +2225,9 @@ async def handle_browser_api(request: web.Request) -> web.Response:
             pref = body.get('backend', 'auto') if isinstance(body, dict) else 'auto'
             b = await router.resolve_backend(pref)
             tabs = await b.list_tabs()
-            tid = str(body.get("tabId") or (tabs[0]["tabId"] if tabs else ""))
+            valid_tabs = [t for t in tabs if not str(t.get("url", "")).startswith("chrome-extension://") and not str(t.get("url", "")).startswith("devtools://")]
+            default_tid = valid_tabs[-1]["tabId"] if valid_tabs else (tabs[-1]["tabId"] if tabs else "")
+            tid = str(body.get("tabId") or default_tid)
             act_res = await router.execute_action(
                 tab_id=tid,
                 action=body.get("action", "click"),
@@ -2233,7 +2241,9 @@ async def handle_browser_api(request: web.Request) -> web.Response:
             pref = body.get('backend', 'auto') if isinstance(body, dict) else 'auto'
             b = await router.resolve_backend(pref)
             tabs = await b.list_tabs()
-            tid = str(body.get("tabId") or (tabs[0]["tabId"] if tabs else ""))
+            valid_tabs = [t for t in tabs if not str(t.get("url", "")).startswith("chrome-extension://") and not str(t.get("url", "")).startswith("devtools://")]
+            default_tid = valid_tabs[-1]["tabId"] if valid_tabs else (tabs[-1]["tabId"] if tabs else "")
+            tid = str(body.get("tabId") or default_tid)
             resolver = ElementResolver(cache=cache)
             q = ElementQuery(
                 selector=body.get("selector"),
@@ -2319,6 +2329,27 @@ async def main() -> None:
     print(f"Dashboard   : http://{HTTP_HOST}:{HTTP_PORT}/dashboard", flush=True)
     print(f"Health      : http://{HTTP_HOST}:{HTTP_PORT}/health", flush=True)
     print(f"============================================================", flush=True)
+
+    async def warm_engines():
+        print("[Gateway] Warming up engines sequentially to avoid contention...", flush=True)
+        for b_name in ["playwright", "moli", "agent-browser", "obscura", "camoufox"]:
+            try:
+                b = await router.resolve_backend(b_name)
+                if not await b.is_connected():
+                    async with start_semaphore:
+                        async with start_semaphore: await b.start()
+                tabs = await b.list_tabs()
+                if not tabs:
+                    await b.create_tab()
+                print(f"[Gateway] Warmed {b_name} successfully.", flush=True)
+                import asyncio
+                await asyncio.sleep(2.0)
+            except Exception as e:
+                print(f"[Gateway] Failed to warm {b_name}: {e}", flush=True)
+
+    # Kick off warm-up without blocking
+    import asyncio
+    asyncio.create_task(warm_engines())
 
     # Keep server running
     try:

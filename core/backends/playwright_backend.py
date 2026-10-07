@@ -101,7 +101,10 @@ class PlaywrightBackend(BaseBrowserBackend):
             await self.start()
         page = await self._context.new_page()
         if url and url != "about:blank":
-            await page.goto(url)
+            try:
+                await page.goto(url, wait_until="domcontentloaded", timeout=90000)
+            except Exception:
+                pass
         self._page_counter += 1
         tid = f"pw_{self._page_counter}"
         self._pages[tid] = page
@@ -125,8 +128,14 @@ class PlaywrightBackend(BaseBrowserBackend):
         if not self._pages or not self._browser or not self._browser.is_connected():
             await self.ensure_active_page()
         page = self._get_page(tab_id)
-        # Event-driven wait
-        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        # Event-driven wait with aggressive timeout and retry
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=60000)
+        except Exception as e:
+            logger.warning("Playwright navigation timeout: %s. Retrying...", e)
+            import asyncio
+            await asyncio.sleep(2)
+            await page.goto(url, wait_until="domcontentloaded", timeout=90000)
         return True
 
     async def get_title(self, tab_id: str) -> str:
@@ -157,7 +166,8 @@ class PlaywrightBackend(BaseBrowserBackend):
         page = self._get_page(tab_id)
         try:
             await page.evaluate(f"window.scrollBy({delta_x}, {delta_y})")
-        except Exception:
+        except Exception as e:
+            logger.error("SCROLL EXCEPTION: %s", e)
             await page.mouse.wheel(delta_x, delta_y)
         return True
 

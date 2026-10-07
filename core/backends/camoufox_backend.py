@@ -21,7 +21,14 @@ class CamoufoxBackend(PlaywrightBackend):
         
         from camoufox.async_api import AsyncCamoufox
         # AsyncCamoufox acts like a browser context in Playwright
-        self._camoufox_instance = AsyncCamoufox(headless=self.headless, addons=[])
+        import os
+        os.makedirs('.openmuse/camoufox', exist_ok=True)
+        self._camoufox_instance = AsyncCamoufox(
+            headless=self.headless,
+            addons=[],
+            persistent_context=True,
+            user_data_dir=os.path.abspath('.openmuse/camoufox')
+        )
         self._context = await self._camoufox_instance.__aenter__()
         self._browser = self._context  # Alias for compatibility checks
         
