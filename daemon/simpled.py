@@ -1003,6 +1003,28 @@ MCP_TOOLS = [
         }
     },
     {
+        "name": "computer_exec",
+        "description": "Run a shell command on the host computer and return stdout/stderr.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "command": {"type": "string", "description": "The shell command to execute"}
+            },
+            "required": ["command"]
+        }
+    },
+    {
+        "name": "computer_launch",
+        "description": "Launch an application by name or executable path.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "app": {"type": "string", "description": "Application name or path (e.g. 'chrome', 'calc')"}
+            },
+            "required": ["app"]
+        }
+    },
+    {
         "name": "computer_windows",
         "description": "List all open desktop application windows with handles and bounds.",
         "inputSchema": {
