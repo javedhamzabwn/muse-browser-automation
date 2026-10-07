@@ -92,7 +92,7 @@ class McpComputerAdapter(BaseComputerAdapter):
         if self.backend_name == "pyautogui-mcp":
             res = await self._call_tool("pyautogui_screenshot_encoded", {})
         else:
-            res = await self._call_tool("computer_screenshot", {})
+            res = await self._call_tool("screenshot", {})
             
         content = res.get("content", [])
         for block in content:
@@ -109,14 +109,14 @@ class McpComputerAdapter(BaseComputerAdapter):
         if self.backend_name == "pyautogui-mcp":
             await self._call_tool("pyautogui_moveTo", {"x": x, "y": y})
         else:
-            await self._call_tool("computer_move", {"x": x, "y": y})
+            await self._call_tool("mouse_move", {"x": x, "y": y})
         return ComputerActionResponse(success=True, action="mouse_move", details={"x": x, "y": y})
 
     async def mouse_click(self, x: int, y: int, button: str = "left", clicks: int = 1) -> ComputerActionResponse:
         if self.backend_name == "pyautogui-mcp":
             await self._call_tool("pyautogui_click", {"x": x, "y": y, "button": button, "clicks": clicks})
         else:
-            await self._call_tool("computer_click", {"x": x, "y": y, "button": button, "clicks": clicks})
+            await self._call_tool("mouse_click", {"x": x, "y": y, "button": button, "clicks": clicks})
         return ComputerActionResponse(success=True, action="mouse_click", details={})
 
     async def mouse_drag(self, start_x: int, start_y: int, end_x: int, end_y: int) -> ComputerActionResponse:
@@ -124,14 +124,14 @@ class McpComputerAdapter(BaseComputerAdapter):
             await self._call_tool("pyautogui_moveTo", {"x": start_x, "y": start_y})
             await self._call_tool("pyautogui_dragTo", {"x": end_x, "y": end_y, "button": "left"})
         else:
-            await self._call_tool("computer_drag", {"x": end_x, "y": end_y})
+            await self._call_tool("mouse_drag", {"x": end_x, "y": end_y})
         return ComputerActionResponse(success=True, action="mouse_drag", details={})
 
     async def type_text(self, text: str) -> ComputerActionResponse:
         if self.backend_name == "pyautogui-mcp":
             await self._call_tool("pyautogui_typewrite", {"message": text})
         else:
-            await self._call_tool("computer_type", {"text": text})
+            await self._call_tool("type_text", {"text": text})
         return ComputerActionResponse(success=True, action="type_text", details={})
 
     async def press_hotkey(self, keys: List[str]) -> ComputerActionResponse:
@@ -139,7 +139,7 @@ class McpComputerAdapter(BaseComputerAdapter):
             # pyautogui-mcp might expect them as positional or a list, we just send keys
             await self._call_tool("pyautogui_hotkey", {"keys": keys})
         else:
-            await self._call_tool("computer_hotkey", {"keys": keys})
+            await self._call_tool("key_hotkey", {"keys": keys})
         return ComputerActionResponse(success=True, action="press_hotkey", details={})
 
     async def list_windows(self) -> List[WindowInfo]:

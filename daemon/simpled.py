@@ -1864,17 +1864,6 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
         return {"tools": {k: {"status": v[0].value, "detail": v[1]} for k, v in checks.items()}, "system": doc}
 
     # Computer Control Handlers
-    if name == "computer_click":
-        comp = await get_computer_adapter(args)
-        res = await comp.mouse_click(int(args["x"]), int(args["y"]), button=args.get("button", "left"), clicks=int(args.get("clicks", 1)))
-        return {"success": res.success, "action": res.action, "details": res.details, "error": res.error}
-
-    if name == "computer_type":
-        comp = await get_computer_adapter(args)
-        res = await comp.type_text(args["text"])
-        return {"success": res.success, "action": res.action, "details": res.details}
-
-    # --- Computer Routing Logic ---
     async def get_computer_adapter(args: dict):
         pref = args.get("backend", "auto")
         if pref == "pyautogui-mcp":
@@ -1894,6 +1883,17 @@ async def dispatch_tool_call(name: str, args: Dict[str, Any]) -> Any:
             from core.tools.adapters.computer.pyautogui_adapter import PyAutoGUIAdapter
             return PyAutoGUIAdapter()
 
+    if name == "computer_click":
+        comp = await get_computer_adapter(args)
+        res = await comp.mouse_click(int(args["x"]), int(args["y"]), button=args.get("button", "left"), clicks=int(args.get("clicks", 1)))
+        return {"success": res.success, "action": res.action, "details": res.details, "error": res.error}
+
+    if name == "computer_type":
+        comp = await get_computer_adapter(args)
+        res = await comp.type_text(args["text"])
+        return {"success": res.success, "action": res.action, "details": res.details}
+
+    # --- Computer Routing Logic ---
     if name == "computer_screenshot":
         import base64
         comp = await get_computer_adapter(args)
