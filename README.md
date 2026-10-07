@@ -8,6 +8,12 @@ Muse 4.0 evolves web automation from brittle scripts into a deterministic, multi
 
 ## Key Highlights
 
+### Recent Updates
+- **Normalized Multi-Engine Execution**: Native JavaScript execution (rowser_evaluate, rowser_select) and fallback actions (rowser_scroll) are now fully stabilized across all 7 backend engines (Chrome, Playwright, Moli, Obscura, Camoufox, Agent-Browser, and CSI).
+- **Computer-Use Tool Auto-Launch**: Fixed auto-launch logic and paths for .NET, Python, and Node computer-control binaries (mcp-computer-use, pyautogui-mcp, zavora-computer-use).
+- **Normalized Schemas**: The rowser_find tool now consistently returns standard {"found": bool, "elements": [...]} shape regardless of which internal engine evaluates the semantic search.
+
+
 - **Single-Port Architecture (Port 18010)**:
   - Exposes **ONE LOCAL PORT ONLY** (`127.0.0.1:18010`) for all external & AI agent communication.
   - No separate public ports for MCP, REST API, WebSocket, Dashboard, or Health.
